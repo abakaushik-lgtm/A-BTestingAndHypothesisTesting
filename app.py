@@ -497,8 +497,9 @@ with tab_analytics:
             if has_timestamp:
                 # Group by day and variant
                 # Clone timestamp safely to date
-                cleaned_df["Date"] = pd.to_datetime(cleaned_df["Timestamp"]).dt.date
-                daily_perf = cleaned_df.groupby(["Date", "Variant"]).agg({
+                df_trend = cleaned_df.copy()
+                df_trend["Date"] = pd.to_datetime(df_trend["Timestamp"], errors="coerce").dt.date
+                daily_perf = df_trend.groupby(["Date", "Variant"]).agg({
                     "User ID": "nunique",
                     "Purchase Completed": "sum"
                 }).reset_index()
